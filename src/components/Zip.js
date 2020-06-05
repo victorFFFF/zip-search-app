@@ -61,7 +61,7 @@ class Zip extends Component {
       
       return (     
         <form onSubmit={this.mySubmitHandler}>    
-            <input type='text' name="theInput" />
+            <input type='text' name="theInput" placeholder="Search" />
             <input type='submit'/>
             {display}
       </form>
