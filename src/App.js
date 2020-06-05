@@ -4,7 +4,10 @@ import Zip from "./component/zip";
 
 class App extends Component{
 
-  
+ render(){
+   return <Zip/>
+   
+ }
 
 }
 
