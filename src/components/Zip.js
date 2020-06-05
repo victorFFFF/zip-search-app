@@ -6,8 +6,8 @@ class Zip extends Component {
     constructor(props){
         super(props);
    
-             this.state={zipInfo: []};
-            
+             this.state={zipInfo: [],};
+             this.initialState={zipInfo: []};
     }
 
     callTheApi(currentZip) {
@@ -28,46 +28,37 @@ class Zip extends Component {
             this.setState({
                 zipInfo: [...this.state.zipInfo, array]}) 
            }
-            
-
           })
           .catch((err) => alert(this.state.zipCode + " zip code not found"));
       }
 
-      mySubmitHandler = (event) => {
-          event.preventDefault();
-          this.setState({
-             zipCode : event.target.theInput.value,
-              found: true,
-          });
-          this.callTheApi(event.target.theInput.value);
-      }
 
-    
+      mySubmitHandler = (event) => {
+        
+            event.preventDefault();
+            this.setState(this.initialState);
+            this.callTheApi(event.target.theInput.value);
+      }
 
   render() {
      
       let display;
-      if( this.state.found)
-      {    display = (
-        <ul>
-            {this.state.zipInfo.map((s) => (
-            <div style={{border: '2px solid black'}}>
+      display = (
+        <ul  >
+            {this.state.zipInfo.map((info) => (
+            <div  style={{border: '2px solid black'}}>
             <br/>
-            <h4 style={{backgroundColor: "gray", border: '2px solid black'}}>{s[0]} </h4>
-            <li >State :{s[1]}</li>
-            <li>Location: ({s[2]},{s[3]})</li>
-            <li>Poulation(estimated): {s[4]}</li>
-            <li>Total Wages:{s[5]}</li>
+            <h4 style={{backgroundColor: "gray"}}>{info[0]} </h4>
+            <p>State :{info[1]}</p>
+            <p>Location: ({info[2]},{info[3]})</p>
+            <p>Poulation(estimated): {info[4]}</p>
+            <p>Total Wages:{info[5]}</p>
             <br/>
             </div>
           ))}
       </ul>
-    
       );
-      }
-
-
+      
       return (     
         <form onSubmit={this.mySubmitHandler}>    
             <input type='text' name="theInput" />
@@ -76,7 +67,6 @@ class Zip extends Component {
       </form>
 
         );
-   
     }
  
   }
