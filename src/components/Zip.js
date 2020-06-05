@@ -5,33 +5,33 @@ import axios from "axios";
 class Zip extends Component {
     constructor(props){
         super(props);
-        this.state = { 
-                       zipCode: "",
-                        theState: "",
-                        theCity: "",
-                        found: false,};
-            // this.state = { zipCode:null ,zipInfo :[]};
+   
+             this.state={zipInfo: []};
+            
     }
 
-    updateSomething(currentZip) {
+    callTheApi(currentZip) {
             const url = "http://ctp-zip-api.herokuapp.com/zip/";
         axios
           .get(url + currentZip)
           .then((response) => {
             const data = response.data;
-        
-            console.log("DATA HERE");
-            console.log(data);
-            // console.log(data[0].Zipcode);
-            // console.log(data[0].State);    
-            //  console.log("ZIPINFO HERE" +this.state.theState);
-            this.setState({ zipCode: data[0].Zipcode,
-                            theState: data[0].State,
-                            theCity: data[0].City, });
-            // console.log("ZIPINFO HERE" +this.state.theState);
+
+           for(let i = 0 ; i < data.length; i++)
+           {  
+             let array = [data[i].City,
+                         data[i].State,
+                         data[i].Xaxis,
+                         data[i].Yaxis,
+                         data[i].EstimatedPopulation,
+                         data[i].TotalWages];
+            this.setState({
+                zipInfo: [...this.state.zipInfo, array]}) 
+           }
+            
 
           })
-          .catch((err) => console.log(this.state.zipCode + "not"));
+          .catch((err) => alert(this.state.zipCode + " zip code not found"));
       }
 
       mySubmitHandler = (event) => {
@@ -40,20 +40,30 @@ class Zip extends Component {
              zipCode : event.target.theInput.value,
               found: true,
           });
-          this.updateSomething(event.target.theInput.value);
+          this.callTheApi(event.target.theInput.value);
       }
 
     
 
   render() {
+     
       let display;
       if( this.state.found)
       {    display = (
         <ul>
-        <li>{this.state.zipCode}</li>
-        <li>{this.state.theState}</li>
-        <li>{this.state.theCity}</li>
+            {this.state.zipInfo.map((s) => (
+            <div style={{border: '2px solid black'}}>
+            <br/>
+            <h4 style={{backgroundColor: "gray", border: '2px solid black'}}>{s[0]} </h4>
+            <li >State :{s[1]}</li>
+            <li>Location: ({s[2]},{s[3]})</li>
+            <li>Poulation(estimated): {s[4]}</li>
+            <li>Total Wages:{s[5]}</li>
+            <br/>
+            </div>
+          ))}
       </ul>
+    
       );
       }
 
